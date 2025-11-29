@@ -1,17 +1,23 @@
 // src/contexts/CartContext.tsx
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { api } from "@/lib/api";
 import { useAuth } from "@/contexts/AuthContext";
 import type { Product, Option } from "@/types/product";
 
 export type CartItem = {
-  _id: string;        // subdocument id from server
-  product: string;    // product ObjectId
-  optionId: string;   // option ObjectId
-  name: string;       // product name snapshot
-  optionName: string; // option name snapshot
+  _id: string;
+  product: string;
+  optionId: string;
+  name: string;
+  optionName: string;
   img?: string;
-  price: number;      // unit price snapshot
+  price: number;
   quantity: number;
 };
 
@@ -36,7 +42,19 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const [subtotal, setSubtotal] = useState(0);
   const [loading, setLoading] = useState(false);
 
-  // Always fetch the source of truth
+  // helper לקריאת תשובה מהשרת
+  function applyServerCart(data: any) {
+    const items = Array.isArray(data?.cart?.items)
+      ? data.cart.items
+      : [];
+    const sub =
+      typeof data?.subtotal === "number" ? data.subtotal : 0;
+
+    setCart(items);
+    setSubtotal(sub);
+  }
+
+  // טעינה ראשונית / שינוי user
   const refresh = async () => {
     if (!user) {
       setCart([]);
@@ -45,9 +63,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     }
     setLoading(true);
     try {
-      const r = await api.get("/cart", { params: { _ts: Date.now() } }); // cache-bust
-      setCart(Array.isArray(r.data?.cart?.items) ? r.data.cart.items : []);
-      setSubtotal(typeof r.data?.subtotal === "number" ? r.data.subtotal : 0);
+      const r = await api.get("/cart", { params: { _ts: Date.now() } });
+      applyServerCart(r.data);
     } finally {
       setLoading(false);
     }
@@ -58,31 +75,55 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
-  // Mutations: do the call, then force refresh
+  // ----- MUTATIONS – בקשה אחת בלבד לכל פעולה -----
+
   async function addToCart(p: Product, opt: Option, qty: number = 1) {
     if (!user) throw new Error("LOGIN_REQUIRED");
     if (!opt?._id) throw new Error("OPTION_ID_REQUIRED");
-    await api.post("/cart/items", {
-      productId: p._id,
-      optionId: opt._id,
-      quantity: qty,
-    });
-    await refresh();
+
+    setLoading(true);
+    try {
+      const r = await api.post("/cart/items", {
+        productId: p._id,
+        optionId: opt._id,
+        quantity: qty,
+      });
+      applyServerCart(r.data); // 👈 לעדכן מהתשובה
+    } finally {
+      setLoading(false);
+    }
   }
 
   async function updateQty(itemId: string, qty: number) {
-    await api.patch(`/cart/items/${itemId}`, { quantity: qty });
-    await refresh();
+    setLoading(true);
+    try {
+      const r = await api.patch(`/cart/items/${itemId}`, {
+        quantity: qty,
+      });
+      applyServerCart(r.data);
+    } finally {
+      setLoading(false);
+    }
   }
 
   async function removeItem(itemId: string) {
-    await api.delete(`/cart/items/${itemId}`);
-    await refresh();
+    setLoading(true);
+    try {
+      const r = await api.delete(`/cart/items/${itemId}`);
+      applyServerCart(r.data);
+    } finally {
+      setLoading(false);
+    }
   }
 
   async function clearCart() {
-    await api.delete("/cart");
-    await refresh();
+    setLoading(true);
+    try {
+      const r = await api.delete("/cart");
+      applyServerCart(r.data);
+    } finally {
+      setLoading(false);
+    }
   }
 
   const totalItems = useMemo(

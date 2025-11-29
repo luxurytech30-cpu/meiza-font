@@ -6,8 +6,11 @@ import { Button } from "@/components/ui/button";
 import ProductCard from "@/components/ProductCard";
 import { api } from "@/lib/api";
 import heroImage from "@/assets/hero-home.jpg";
+import heroImage2 from "@/assets/product-bowl.jpg";  
+import heroImage3 from "@/assets/product-candles.jpg";
 import aboutImage from "@/assets/about-heritage.jpg";
 import type { Product } from "@/types/product";
+import { useEffect, useMemo, useState } from "react";
 
 async function fetchFeatured(): Promise<Product[]> {
   // Try server-side featured
@@ -34,7 +37,28 @@ const Home = () => {
     queryFn: fetchFeatured,
     staleTime: 60_000,
   });
+    const heroImages = [heroImage, heroImage2, heroImage3];
+  const [heroIndex, setHeroIndex] = useState(0);
 
+ useEffect(() => {
+    const id = setInterval(() => {
+      setHeroIndex((prev) => (prev + 1) % heroImages.length);
+    }, 6000); // 6s per slide
+    return () => clearInterval(id);
+  }, [heroImages.length]);
+
+  const particles = useMemo(
+    () =>
+      Array.from({ length: 14 }).map((_, i) => ({
+        id: i,
+        top: `${Math.random() * 100}%`,
+        left: `${Math.random() * 100}%`,
+        delay: `${Math.random() * 4}s`,
+        duration: `${7 + Math.random() * 6}s`,
+        size: `${6 + Math.random() * 10}px`,
+      })),
+    []
+  );
   return (
     <main className="min-h-screen">
       {/* Hero */}
@@ -42,13 +66,35 @@ const Home = () => {
         className="relative h-screen flex items-center justify-center overflow-hidden"
         aria-label="Hero section"
       >
-        <div className="absolute inset-0">
-          <img
-            src={heroImage}
-            alt="Luxury home interior"
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-overlay"></div>
+    <div className="absolute inset-0">
+          {heroImages.map((src, i) => (
+            <img
+              key={i}
+              src={src}
+              alt="Luxury home interior"
+              className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-[2000ms] ${
+                heroIndex === i ? "opacity-100" : "opacity-0"
+              }`}
+            />
+          ))}
+          <div className="absolute inset-0 bg-gradient-overlay" />
+        </div>
+
+        {/* (optional) moving particles */}
+        <div className="pointer-events-none absolute inset-0">
+          {particles.map((p) => (
+            <div
+              key={p.id}
+              className="absolute rounded-full bg-white/40 mix-blend-screen"
+              style={{
+                top: p.top,
+                left: p.left,
+                width: p.size,
+                height: p.size,
+                animation: `hero-float ${p.duration} ease-in-out ${p.delay} infinite`,
+              }}
+            />
+          ))}
         </div>
 
         <div className="relative z-10 text-center px-4 animate-fade-in">
@@ -68,6 +114,17 @@ const Home = () => {
             </Button>
           </Link>
         </div>
+        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 flex gap-3">
+  {heroImages.map((_, i) => (
+    <button
+      key={i}
+      onClick={() => setHeroIndex(i)}
+      className={`h-3 w-3 rounded-full transition-all 
+        ${heroIndex === i ? "bg-accent w-6" : "bg-white/50 hover:bg-white"}`}
+      aria-label={`Go to slide ${i + 1}`}
+    />
+  ))}
+</div>
       </section>
 
       {/* Featured */}

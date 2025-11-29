@@ -57,6 +57,28 @@ const translations: Record<Language, Translations> = {
     "cart.checkout": "Proceed to Checkout",
     "cart.remove": "Remove",
 
+
+       "cart.shippingDetails": "Shipping details",
+    "cart.fullName": "Full name",
+    "cart.phone": "Phone",
+    "cart.city": "City",
+    "cart.street": "Street / address",
+    "cart.notes": "Notes (optional)",
+
+    "cart.paymentMethod": "Payment method",
+    "cart.cod": "Cash on delivery",
+    "cart.card": "Credit card",
+
+    "cart.processing": "Placing order...",
+    "cart.cardUnavailable":
+      "Card payments are not available yet. Please choose cash on delivery.",
+
+    "cart.error_fullNameRequired": "Please enter your full name",
+    "cart.error_phoneRequired": "Please enter your phone number",
+    "cart.error_cityRequired": "Please enter your city",
+    "cart.error_streetRequired": "Please enter your street address",
+
+
     // About
     "about.title": "About MEIZA HERITAGE",
     "about.subtitle": "Timeless Elegance, Modern Living",
@@ -140,6 +162,26 @@ const translations: Record<Language, Translations> = {
     "cart.total": "סה\"כ",
     "cart.checkout": "המשך לתשלום",
     "cart.remove": "הסר",
+       "cart.shippingDetails": "פרטי משלוח",
+    "cart.fullName": "שם מלא",
+    "cart.phone": "טלפון",
+    "cart.city": "עיר",
+    "cart.street": "רחוב / כתובת",
+    "cart.notes": "הערות (לא חובה)",
+
+    "cart.paymentMethod": "אמצעי תשלום",
+    "cart.cod": "תשלום במזומן בעת קבלה",
+    "cart.card": "כרטיס אשראי",
+
+    "cart.processing": "מבצע את ההזמנה...",
+    "cart.cardUnavailable":
+      "תשלום בכרטיס אשראי עדיין לא זמין. אנא בחרו תשלום במזומן בעת קבלה.",
+
+    "cart.error_fullNameRequired": "יש להזין שם מלא",
+    "cart.error_phoneRequired": "יש להזין מספר טלפון",
+    "cart.error_cityRequired": "יש להזין עיר",
+    "cart.error_streetRequired": "יש להזין כתובת מלאה",
+
 
     // About
     "about.title": "אודות מייזה הריטג'",

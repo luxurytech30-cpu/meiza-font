@@ -259,6 +259,7 @@ export default function Cart() {
   const [shippingForm, setShippingForm] = useState({
     fullName: "",
     phone: "",
+     email: "",
     city: "",
     street: "",
     notes: "",
@@ -336,11 +337,19 @@ export default function Cart() {
 
 function validateShipping() {
   if (!shippingForm.fullName.trim()) return t("cart.error_fullNameRequired");
+  if (!shippingForm.email.trim())
+    return t("cart.error_emailRequired") || "Email is required";
+
+  // simple email check (optional but useful)
+  if (!shippingForm.email.includes("@"))
+    return t("cart.error_emailInvalid") || "Please enter a valid email";
+
   if (!shippingForm.phone.trim()) return t("cart.error_phoneRequired");
   if (!shippingForm.city.trim()) return t("cart.error_cityRequired");
   if (!shippingForm.street.trim()) return t("cart.error_streetRequired");
   return null;
 }
+
 
 
   async function handleCheckout() {
@@ -367,6 +376,7 @@ function validateShipping() {
       const res = await api.post("/orders/checkout", {
         shipping: {
           fullName: shippingForm.fullName,
+          email: shippingForm.email,     
           phone: shippingForm.phone,
           city: shippingForm.city,
           addressLine1: shippingForm.street,
@@ -545,36 +555,44 @@ function validateShipping() {
               </div>
 
               {/* Shipping details */}
-              <div className="space-y-3">
-                <div className="text-sm font-semibold text-foreground">
-                  {t("cart.shippingDetails") || "Shipping details"}
-                </div>
-                <Input
-                  placeholder={t("cart.fullName") || "Full name"}
-                  value={shippingForm.fullName}
-                  onChange={(e) => updateShipping("fullName", e.target.value)}
-                />
-                <Input
-                  placeholder={t("cart.phone") || "Phone"}
-                  value={shippingForm.phone}
-                  onChange={(e) => updateShipping("phone", e.target.value)}
-                />
-                <Input
-                  placeholder={t("cart.city") || "City"}
-                  value={shippingForm.city}
-                  onChange={(e) => updateShipping("city", e.target.value)}
-                />
-                <Input
-                  placeholder={t("cart.street") || "Street / address"}
-                  value={shippingForm.street}
-                  onChange={(e) => updateShipping("street", e.target.value)}
-                />
-                <Input
-                  placeholder={t("cart.notes") || "Notes (optional)"}
-                  value={shippingForm.notes}
-                  onChange={(e) => updateShipping("notes", e.target.value)}
-                />
-              </div>
+        <div className="space-y-3">
+  <div className="text-sm font-semibold text-foreground">
+    {t("cart.shippingDetails") || "Shipping details"}
+  </div>
+  <Input
+    placeholder={t("cart.fullName") || "Full name"}
+    value={shippingForm.fullName}
+    onChange={(e) => updateShipping("fullName", e.target.value)}
+  />
+  {/* NEW: Email */}
+  <Input
+    type="email"
+    placeholder={t("cart.email") || "Email"}
+    value={shippingForm.email}
+    onChange={(e) => updateShipping("email", e.target.value)}
+  />
+  <Input
+    placeholder={t("cart.phone") || "Phone"}
+    value={shippingForm.phone}
+    onChange={(e) => updateShipping("phone", e.target.value)}
+  />
+  <Input
+    placeholder={t("cart.city") || "City"}
+    value={shippingForm.city}
+    onChange={(e) => updateShipping("city", e.target.value)}
+  />
+  <Input
+    placeholder={t("cart.street") || "Street / address"}
+    value={shippingForm.street}
+    onChange={(e) => updateShipping("street", e.target.value)}
+  />
+  <Input
+    placeholder={t("cart.notes") || "Notes (optional)"}
+    value={shippingForm.notes}
+    onChange={(e) => updateShipping("notes", e.target.value)}
+  />
+</div>
+
 
               {/* Payment method */}
               <div className="space-y-2">

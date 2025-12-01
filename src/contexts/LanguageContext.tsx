@@ -60,6 +60,7 @@ const translations: Record<Language, Translations> = {
 
        "cart.shippingDetails": "Shipping details",
     "cart.fullName": "Full name",
+     "cart.email": "email ",
     "cart.phone": "Phone",
     "cart.city": "City",
     "cart.street": "Street / address",
@@ -164,6 +165,7 @@ const translations: Record<Language, Translations> = {
     "cart.remove": "הסר",
        "cart.shippingDetails": "פרטי משלוח",
     "cart.fullName": "שם מלא",
+    "cart.email": "מייל לקבלה",
     "cart.phone": "טלפון",
     "cart.city": "עיר",
     "cart.street": "רחוב / כתובת",

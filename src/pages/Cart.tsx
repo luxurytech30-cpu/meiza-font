@@ -259,7 +259,7 @@ export default function Cart() {
   const [shippingForm, setShippingForm] = useState({
     fullName: "",
     phone: "",
-     email: "",
+    email: "",
     city: "",
     street: "",
     notes: "",
@@ -373,6 +373,7 @@ function validateShipping() {
 
     setPlacingOrder(true);
     try {
+      console.log(shippingForm.email)
       const res = await api.post("/orders/checkout", {
         shipping: {
           fullName: shippingForm.fullName,
@@ -385,7 +386,7 @@ function validateShipping() {
         shippingPrice: shipping,
         paymentMethod, // "cod"
       });
-
+      console.log(res,"suc")
       await refresh(); // sync cart state
 
       toast.success(t("cart.orderSuccess") || "Order placed successfully");
@@ -637,7 +638,7 @@ function validateShipping() {
                 disabled={placingOrder}
               >
                 {placingOrder
-                  ? t("cart.checkoutProcessing") || "Placing order..."
+                  ? t("cart.processing") || "Placing order..."
                   : t("cart.checkout")}
               </Button>
 

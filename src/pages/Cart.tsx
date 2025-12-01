@@ -427,7 +427,7 @@ function validateShipping() {
 
               return (
                 <Card key={id} className="p-6 border-border">
-                  <div className="flex gap-6">
+  <div className="flex flex-col gap-4 sm:flex-row sm:gap-6">
                     <Link to={productPath} className="shrink-0">
                       <img
                         src={item.img || "/placeholder.svg"}

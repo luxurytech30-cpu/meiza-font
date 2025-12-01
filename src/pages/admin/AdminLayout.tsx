@@ -1,11 +1,27 @@
 // pages/admin/AdminLayout.tsx
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet, Navigate, useLocation } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
+// ✅ adjust this import to your real auth context
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function AdminLayout() {
   const { language } = useLanguage();
+  const { user } = useAuth(); // { role: "admin" | "user" | ... }
+  const location = useLocation();
   const rtl = language === "he";
   const L = (en: string, he: string) => (rtl ? he : en);
+
+  // ======== FRONTEND GUARD =========
+  if (!user) {
+    // not logged in → go to login
+    return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+
+  if (!user.roles.includes("admin")) {
+    // logged in but not admin → block admin area
+    return <Navigate to="/" replace />;
+  }
+  // ================================
 
   const link = ({ isActive }: { isActive: boolean }) =>
     `px-4 py-2 rounded whitespace-nowrap text-sm md:text-base

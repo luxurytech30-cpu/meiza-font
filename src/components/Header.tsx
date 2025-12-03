@@ -43,50 +43,50 @@ const Header = () => {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
       <nav
-        className="container mx-auto px-4 py-4"
+        className="container mx-auto px-4 py-3 md:py-4"
         role="navigation"
         aria-label="Main navigation"
       >
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between gap-3">
           {/* Logo */}
           <Link
             to="/"
-            className="text-2xl font-serif font-bold text-gradient-gold hover:opacity-80 transition-opacity"
+            className="text-xl sm:text-2xl font-serif font-bold text-gradient-gold hover:opacity-80 transition-opacity"
             onClick={closeMobile}
           >
             MEIZA HERITAGE
           </Link>
 
-          {/* Desktop nav */}
-          <div className="hidden md:flex items-center gap-8">
+          {/* Desktop nav (LG and up – laptops/desktops) */}
+          <div className="hidden lg:flex items-center gap-6 xl:gap-8">
             <Link
               to="/"
-              className="text-foreground hover:text-accent transition-colors"
+              className="text-sm xl:text-base text-foreground hover:text-accent transition-colors"
             >
               {t("nav.home")}
             </Link>
             <Link
               to="/products"
-              className="text-foreground hover:text-accent transition-colors"
+              className="text-sm xl:text-base text-foreground hover:text-accent transition-colors"
             >
               {t("nav.products")}
             </Link>
             <Link
               to="/about"
-              className="text-foreground hover:text-accent transition-colors"
+              className="text-sm xl:text-base text-foreground hover:text-accent transition-colors"
             >
               {t("nav.about")}
             </Link>
             <Link
               to="/contact"
-              className="text-foreground hover:text-accent transition-colors"
+              className="text-sm xl:text-base text-foreground hover:text-accent transition-colors"
             >
               {t("nav.contact")}
             </Link>
             {user && (
               <Link
                 to="/profile"
-                className="text-foreground hover:text-accent transition-colors"
+                className="text-sm xl:text-base text-foreground hover:text-accent transition-colors"
               >
                 {txt.profile}
               </Link>
@@ -94,15 +94,15 @@ const Header = () => {
             {user?.roles?.includes("admin") && (
               <Link
                 to="/admin"
-                className="text-foreground hover:text-accent transition-colors"
+                className="text-sm xl:text-base text-foreground hover:text-accent transition-colors"
               >
                 {txt.admin}
               </Link>
             )}
           </div>
 
-          {/* Desktop controls */}
-          <div className="hidden md:flex items-center gap-4">
+          {/* Desktop controls (LG and up) */}
+          <div className="hidden lg:flex items-center gap-3">
             <Button
               variant="ghost"
               size="icon"
@@ -140,9 +140,11 @@ const Header = () => {
             </Link>
 
             {user ? (
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 max-w-[220px]">
                 <UserIcon className="h-5 w-5 opacity-70" />
-                <span className="max-w-[120px] truncate">{user.name}</span>
+                <span className="max-w-[120px] truncate text-sm">
+                  {user.name}
+                </span>
                 <Button
                   variant="outline"
                   size="sm"
@@ -170,8 +172,8 @@ const Header = () => {
             )}
           </div>
 
-          {/* Mobile controls (right side) */}
-          <div className="flex md:hidden items-center gap-2">
+          {/* Mobile / tablet controls (up to LG) */}
+          <div className="flex lg:hidden items-center gap-1 sm:gap-2">
             {/* Cart icon */}
             <Link
               to="/cart"
@@ -188,7 +190,7 @@ const Header = () => {
               </Button>
             </Link>
 
-            {/* Theme + language quick toggles (optional) */}
+            {/* Theme toggle */}
             <Button
               variant="ghost"
               size="icon"
@@ -218,9 +220,9 @@ const Header = () => {
           </div>
         </div>
 
-        {/* Mobile menu panel */}
+        {/* Mobile / tablet menu panel (up to LG) */}
         {mobileOpen && (
-          <div className="md:hidden mt-3 border-t border-border pt-3 space-y-3">
+          <div className="lg:hidden mt-3 border-t border-border pt-3 space-y-3">
             <div className="flex flex-col gap-2">
               <Link
                 to="/"

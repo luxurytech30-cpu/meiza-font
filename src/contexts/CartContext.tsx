@@ -42,25 +42,17 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const [subtotal, setSubtotal] = useState(0);
   const [loading, setLoading] = useState(false);
 
-  // helper לקריאת תשובה מהשרת
+  // read server response into state
   function applyServerCart(data: any) {
-    const items = Array.isArray(data?.cart?.items)
-      ? data.cart.items
-      : [];
-    const sub =
-      typeof data?.subtotal === "number" ? data.subtotal : 0;
+    const items = Array.isArray(data?.cart?.items) ? data.cart.items : [];
+    const sub = typeof data?.subtotal === "number" ? data.subtotal : 0;
 
     setCart(items);
     setSubtotal(sub);
   }
 
-  // טעינה ראשונית / שינוי user
+  // initial load + when user changes (login/logout)
   const refresh = async () => {
-    if (!user) {
-      setCart([]);
-      setSubtotal(0);
-      return;
-    }
     setLoading(true);
     try {
       const r = await api.get("/cart", { params: { _ts: Date.now() } });
@@ -71,14 +63,15 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   };
 
   useEffect(() => {
+    // whenever user changes, we re-fetch cart
+    // (backend will use user._id if logged-in, or guestId if not)
     refresh();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
+  }, [user?._id]);
 
-  // ----- MUTATIONS – בקשה אחת בלבד לכל פעולה -----
+  // ---- MUTATIONS ----
 
   async function addToCart(p: Product, opt: Option, qty: number = 1) {
-    if (!user) throw new Error("LOGIN_REQUIRED");
     if (!opt?._id) throw new Error("OPTION_ID_REQUIRED");
 
     setLoading(true);
@@ -88,7 +81,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         optionId: opt._id,
         quantity: qty,
       });
-      applyServerCart(r.data); // 👈 לעדכן מהתשובה
+      applyServerCart(r.data);
     } finally {
       setLoading(false);
     }

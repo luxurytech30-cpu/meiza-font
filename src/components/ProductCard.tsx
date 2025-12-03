@@ -149,10 +149,7 @@ export default function ProductCard({ product }: { product: Product }) {
   const canAdd = !!opt && !soldOut && !adding;
 
   function handleAdd() {
-    if (!user) {
-      nav("/login?next=/products");
-      return;
-    }
+   
     if (!opt || remaining <= 0) return;
 
     setAdding(true);

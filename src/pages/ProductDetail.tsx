@@ -137,7 +137,7 @@ export default function ProductDetail() {
   const canAdd = !!opt && remaining > 0 && !adding;
 
   function handleAdd() {
-    if (!user) { nav(`/login?next=/products/${id}`); return; }
+    
     if (!product || !opt) return;
     if (remaining <= 0) return;
 

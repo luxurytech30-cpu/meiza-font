@@ -371,13 +371,7 @@ export default function ProductCard({ product }: { product: Product }) {
         </div>
       </div>
 
-      {!user && (
-        <p className="mt-2 text-xs text-muted-foreground">
-          {language === "he"
-            ? "התחבר/י כדי להוסיף לעגלה."
-            : "Log in to add items to the cart."}
-        </p>
-      )}
+    
     </Card>
   );
 }

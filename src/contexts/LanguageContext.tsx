@@ -56,7 +56,7 @@ const translations: Record<Language, Translations> = {
     "cart.total": "Total",
     "cart.checkout": "Proceed to Checkout",
     "cart.remove": "Remove",
-
+    "cart.orderSuccess": "Order placed successfully",
 
        "cart.shippingDetails": "Shipping details",
     "cart.fullName": "Full name",

@@ -117,6 +117,19 @@ const Header = () => {
               </Button>
             </Link>
 
+             {/* Desktop language toggle */}
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={toggleLanguage}
+              aria-label={`Switch to ${
+                language === "en" ? "Hebrew" : "English"
+              }`}
+              className="hidden lg:inline-flex"
+            >
+              <Globe className="h-5 w-5" />
+            </Button>
+
             {/* Theme toggle */}
             <Button
               variant="ghost"

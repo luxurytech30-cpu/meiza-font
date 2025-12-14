@@ -390,7 +390,7 @@ function validateShipping() {
       await refresh(); // sync cart state
 
       toast.success(t("cart.orderSuccess") || "Order placed successfully");
-      navigate("/profile");
+      
       // or: navigate(`/orders/${res.data._id}`);
     } catch (e: any) {
       const msg =

@@ -45,7 +45,13 @@ function isSaleActive(o?: Option) {
   return true;
 }
 
-export default function ProductCard({ product }: { product: Product }) {
+export default function ProductCard({
+  product,
+  onOpen,
+}: {
+  product: Product;
+  onOpen?: () => void;
+}) {
   const { cart, addToCart } = useCart();
   const { user } = useAuth();
   const { language } = useLanguage();
@@ -93,7 +99,7 @@ export default function ProductCard({ product }: { product: Product }) {
   const [adding, setAdding] = useState(false);
 
   const nameStr = tText(product.name as any, language as "en" | "he");
-  const descStr = tText((product as any).desc, language as "en" | "he");
+  const descStr = tText((product as any).desc, language as "en" | "he"); // (not rendered)
 
   const imageSrc = useMemo(
     () =>
@@ -101,6 +107,7 @@ export default function ProductCard({ product }: { product: Product }) {
       "/placeholder.svg",
     [opt?.img, (product as any).img]
   );
+
   const imageAlt = useMemo(
     () =>
       `${tText(product.name as any, language as "en" | "he")}${
@@ -149,7 +156,6 @@ export default function ProductCard({ product }: { product: Product }) {
   const canAdd = !!opt && !soldOut && !adding;
 
   function handleAdd() {
-   
     if (!opt || remaining <= 0) return;
 
     setAdding(true);
@@ -161,11 +167,20 @@ export default function ProductCard({ product }: { product: Product }) {
       .finally(() => setAdding(false));
   }
 
+  // Call onOpen before navigating to product detail
+  function handleOpen() {
+    try {
+      onOpen?.();
+    } catch {
+      // ignore
+    }
+  }
+
   return (
     <Card className="p-4 rounded-2xl border border-border hover:shadow-lg transition-shadow">
       {/* Image with magnifier + badges */}
       <div className="relative">
-        <Link to={`/products/${product._id}`}>
+        <Link to={`/products/${product._id}`} onClick={handleOpen}>
           <div
             ref={containerRef}
             className="relative group rounded-xl overflow-hidden"
@@ -176,6 +191,9 @@ export default function ProductCard({ product }: { product: Product }) {
               alt={imageAlt}
               className="w-full h-64 object-cover"
               id="product-img"
+              onError={(e) => {
+                (e.currentTarget as HTMLImageElement).src = "/placeholder.svg";
+              }}
             />
 
             <div
@@ -209,22 +227,18 @@ export default function ProductCard({ product }: { product: Product }) {
       {/* Title */}
       <Link
         to={`/products/${product._id}`}
+        onClick={handleOpen}
         className="mt-3 block text-xl font-semibold hover:text-accent transition-colors"
       >
         {nameStr}
       </Link>
-
-      {/* Description (optional – currently not rendered) */}
 
       {/* Option + Stock row */}
       <div className="mt-3 flex items-center justify-between gap-3">
         {product.options?.length > 0 ? (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button
-                variant="outline"
-                className="min-w-[180px] justify-between"
-              >
+              <Button variant="outline" className="min-w-[180px] justify-between">
                 {opt
                   ? tText(opt.name as any, language as "en" | "he")
                   : language === "he"
@@ -233,11 +247,13 @@ export default function ProductCard({ product }: { product: Product }) {
                 <span className="opacity-60">▾</span>
               </Button>
             </DropdownMenuTrigger>
+
             <DropdownMenuContent align="start" className="w-56">
               <DropdownMenuLabel>
                 {language === "he" ? "בחר אפשרות" : "Select option"}
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
+
               {product.options.map((o: any) => {
                 const oKey = `${product._id}|${o._id ?? o.name ?? ""}`;
                 const inCart = cartQtyByKey.get(oKey) ?? 0;
@@ -259,11 +275,17 @@ export default function ProductCard({ product }: { product: Product }) {
                           src={o.img}
                           alt={oLabel}
                           className="h-8 w-8 rounded object-cover"
+                          onError={(e) => {
+                            (e.currentTarget as HTMLImageElement).style.display =
+                              "none";
+                          }}
                         />
                       ) : (
                         <div className="h-8 w-8 rounded bg-muted" />
                       )}
+
                       <span className="truncate">{oLabel}</span>
+
                       {oRemaining !== Infinity && (
                         <span className="ml-auto text-xs tabular-nums">
                           {oRemaining} {language === "he" ? "נותר" : "left"}
@@ -330,6 +352,7 @@ export default function ProductCard({ product }: { product: Product }) {
                   ₪{sale.toLocaleString()}
                 </span>
               </div>
+
               {opt?.sale?.end && (
                 <span className="text-xs text-muted-foreground">
                   {language === "he" ? "מבצע עד" : "Ends"}{" "}
@@ -347,7 +370,7 @@ export default function ProductCard({ product }: { product: Product }) {
         </div>
 
         <div className="flex items-center gap-2">
-          <Link to={`/products/${product._id}`}>
+          <Link to={`/products/${product._id}`} onClick={handleOpen}>
             <Button
               variant="outline"
               className="border-accent hover:bg-accent hover:text-accent-foreground"
@@ -355,6 +378,7 @@ export default function ProductCard({ product }: { product: Product }) {
               {language === "he" ? "פרטים" : "View"}
             </Button>
           </Link>
+
           <Button
             onClick={handleAdd}
             disabled={!canAdd}
@@ -370,8 +394,6 @@ export default function ProductCard({ product }: { product: Product }) {
           </Button>
         </div>
       </div>
-
-    
     </Card>
   );
 }

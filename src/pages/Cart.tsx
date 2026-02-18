@@ -414,7 +414,7 @@ function validateShipping() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Items */}
           <div className="lg:col-span-2 space-y-4">
-            {cart.map((item) => {
+            {cart?.map((item) => {
               const id = item._id;
               const pending = !!busy[id];
               const line = item.price * item.quantity;
@@ -450,7 +450,7 @@ function validateShipping() {
                       )}
 
                       <p className="text-accent font-semibold mb-4">
-                        ₪{item.price.toLocaleString()}
+                        ₪{item?.price?.toLocaleString()}
                       </p>
 
                       <div className="flex items-center gap-4">

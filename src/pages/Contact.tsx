@@ -52,7 +52,9 @@ export default function Contact() {
           <h1 className="text-5xl md:text-6xl font-serif font-bold mb-4 text-foreground">
             {t("contact.title")}
           </h1>
-          <p className="text-xl text-muted-foreground">{t("contact.subtitle")}</p>
+          <p className="text-xl text-muted-foreground">
+            {t("contact.subtitle")}
+          </p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
@@ -60,7 +62,10 @@ export default function Contact() {
           <Card className="p-8 border-border">
             <form onSubmit={onSubmit} className="space-y-6">
               <div>
-                <label htmlFor="name" className="block text-sm font-medium mb-2 text-foreground">
+                <label
+                  htmlFor="name"
+                  className="block text-sm font-medium mb-2 text-foreground"
+                >
                   {t("contact.name")}
                 </label>
                 <Input
@@ -73,7 +78,10 @@ export default function Contact() {
               </div>
 
               <div>
-                <label htmlFor="email" className="block text-sm font-medium mb-2 text-foreground">
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium mb-2 text-foreground"
+                >
                   {t("contact.email")}
                 </label>
                 <Input
@@ -87,7 +95,10 @@ export default function Contact() {
               </div>
 
               <div>
-                <label htmlFor="message" className="block text-sm font-medium mb-2 text-foreground">
+                <label
+                  htmlFor="message"
+                  className="block text-sm font-medium mb-2 text-foreground"
+                >
                   {t("contact.message")}
                 </label>
                 <Textarea
@@ -105,7 +116,9 @@ export default function Contact() {
                 disabled={sending}
                 className="w-full bg-accent hover:bg-accent/90 text-accent-foreground shadow-gold"
               >
-                {sending ? (t("contact.sending") ?? "Sending...") : t("contact.send")}
+                {sending
+                  ? (t("contact.sending") ?? "Sending...")
+                  : t("contact.send")}
               </Button>
             </form>
           </Card>
@@ -123,8 +136,13 @@ export default function Contact() {
                     <Mail className="h-6 w-6 text-accent" />
                   </div>
                   <div>
-                    <h3 className="font-semibold mb-1 text-foreground">{t("contact.info.email")}</h3>
-                    <a href="mailto:MRCAZA17@GMAIL.COM" className="text-muted-foreground hover:text-accent">
+                    <h3 className="font-semibold mb-1 text-foreground">
+                      {t("contact.info.email")}
+                    </h3>
+                    <a
+                      href="mailto:MRCAZA17@GMAIL.COM"
+                      className="text-muted-foreground hover:text-accent"
+                    >
                       MRCAZA17@GMAIL.COM
                     </a>
                   </div>
@@ -135,9 +153,14 @@ export default function Contact() {
                     <Phone className="h-6 w-6 text-accent" />
                   </div>
                   <div>
-                    <h3 className="font-semibold mb-1 text-foreground">{t("contact.info.phone")}</h3>
-                    <a href="tel:0544689375" className="text-muted-foreground hover:text-accent">
-                      0544689375
+                    <h3 className="font-semibold mb-1 text-foreground">
+                      {t("contact.info.phone")}
+                    </h3>
+                    <a
+                      href="tel:0524555546"
+                      className="text-muted-foreground hover:text-accent"
+                    >
+                      0524555546
                     </a>
                   </div>
                 </div>
@@ -147,16 +170,14 @@ export default function Contact() {
                     <MapPin className="h-6 w-6 text-accent" />
                   </div>
                   <div>
-                    <h3 className="font-semibold mb-1 text-foreground">{t("contact.info.address")}</h3>
-                    <p className="text-muted-foreground">
-                      Afula
-                    </p>
+                    <h3 className="font-semibold mb-1 text-foreground">
+                      {t("contact.info.address")}
+                    </h3>
+                    <p className="text-muted-foreground">Afula</p>
                   </div>
                 </div>
               </div>
             </Card>
-
-           
           </div>
         </div>
       </div>

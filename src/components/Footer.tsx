@@ -46,7 +46,7 @@ const Footer = () => {
             </h4>
             <div className="flex flex-col gap-2 text-muted-foreground">
               <p>MRCAZA17@GMAIL.COM</p>
-              <p>0544689375</p>
+              <p>0524555546</p>
               <p>Afula, Israel</p>
             </div>
           </div>
